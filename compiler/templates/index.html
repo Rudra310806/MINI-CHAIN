@@ -1,0 +1,3843 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MiniChain | Smart Contract Analyzer</title>
+
+
+
+  <style>
+
+    :root {
+
+      --bg: #070b14;
+
+      --panel: #0d1422;
+
+      --surface: #101b2d;
+
+      --surface-soft: #0a1220;
+
+      --line: #203b60;
+
+      --text: #edf4ff;
+
+      --muted: #91a7c5;
+
+      --accent: #3488ff;
+
+      --accent-strong: #1769ff;
+
+      --accent-2: #7654ff;
+
+      --green: #53d6a0;
+
+      --yellow: #f4c76b;
+
+      --red: #ff7d8b;
+
+    }
+
+
+
+    * {
+
+      box-sizing: border-box;
+
+    }
+
+
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      color: var(--text);
+
+      background:
+
+        radial-gradient(ellipse at 15% 0%, #172345 0, transparent 42%),
+
+        var(--bg);
+
+      font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+
+    }
+
+
+
+    button, input, select {
+
+      font: inherit;
+
+    }
+
+
+
+    .shell {
+
+      max-width: 1600px;
+
+      margin: 0 auto;
+
+      padding: 20px 24px 40px;
+
+    }
+
+
+
+    header {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 18px;
+
+      margin-bottom: 24px;
+
+    }
+
+
+
+    .brand {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      font-weight: 800;
+
+      letter-spacing: -.04em;
+
+      font-size: 23px;
+
+    }
+
+
+
+    .logo {
+
+      width: 42px;
+
+      height: 42px;
+
+      display: grid;
+
+      place-items: center;
+
+      border-radius: 13px;
+
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+
+      color: #09101e;
+
+      font-weight: 900;
+
+    }
+
+
+
+    .pill {
+
+      color: #b8c8ff;
+
+      border: 1px solid #394b75;
+
+      background: #17213a;
+
+      border-radius: 999px;
+
+      padding: 7px 11px;
+
+      font-size: 12px;
+
+    }
+
+
+
+    .hero {
+
+      margin-bottom: 20px;
+
+    }
+
+
+
+    .eyebrow {
+
+      text-transform: uppercase;
+
+      color: #a6b7ff;
+
+      letter-spacing: .16em;
+
+      font-size: 11px;
+
+      font-weight: 800;
+
+    }
+
+
+
+    h1 {
+
+      font-size: clamp(34px, 5vw, 54px);
+
+      letter-spacing: -.055em;
+
+      line-height: 1.04;
+
+      margin: 12px 0;
+
+    }
+
+
+
+    .hero p {
+
+      color: var(--muted);
+
+      max-width: 690px;
+
+      line-height: 1.7;
+
+      margin: 0;
+
+    }
+
+
+
+    .layout {
+
+      display: grid;
+
+      grid-template-columns: minmax(250px, 310px) minmax(0, 1fr);
+
+      gap: 18px;
+
+      align-items: start;
+
+    }
+
+
+
+    .panel {
+
+      background: rgba(17, 23, 34, .92);
+
+      border: 1px solid var(--line);
+
+      border-radius: 20px;
+
+      padding: 18px;
+
+      box-shadow: 0 18px 60px #0002;
+
+    }
+
+
+
+    .panel h2 {
+
+      margin: 0 0 7px;
+
+      font-size: 17px;
+
+      letter-spacing: -.02em;
+
+    }
+
+
+
+    .sub {
+
+      color: var(--muted);
+
+      font-size: 13px;
+
+      line-height: 1.55;
+
+      margin: 0 0 22px;
+
+    }
+
+
+
+    label {
+
+      display: block;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      color: #c6d2e6;
+
+      margin: 17px 0 8px;
+
+    }
+
+
+
+    select, .filebox, textarea {
+
+      width: 100%;
+
+      border: 1px solid #354158;
+
+      background: #0c121d;
+
+      color: var(--text);
+
+      border-radius: 11px;
+
+      padding: 12px;
+
+    }
+
+
+
+    .filebox {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 8px;
+
+      border-style: dashed;
+
+      cursor: pointer;
+
+    }
+
+
+
+    .filebox strong {
+
+      font-size: 13px;
+
+    }
+
+
+
+    .filebox span {
+
+      color: var(--muted);
+
+      font-size: 12px;
+
+    }
+
+    .input-mode-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      padding: 5px;
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(8, 15, 27, .8);
+    }
+
+    .input-mode-option {
+      min-height: 38px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .input-mode-option[aria-pressed="true"] {
+      color: var(--text);
+      border-color: rgba(116, 169, 255, .48);
+      background: linear-gradient(110deg, rgba(23, 105, 255, .72), rgba(118, 84, 255, .58));
+      box-shadow: 0 4px 14px rgba(23, 105, 255, .14);
+    }
+
+    .source-editor {
+      display: block;
+      width: 100%;
+      min-height: 270px;
+      resize: vertical;
+      padding: 13px;
+      border: 1px solid #27466c;
+      border-radius: 11px;
+      background: #080f1b;
+      color: var(--text);
+      font: 12px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace;
+      tab-size: 4;
+    }
+
+    .source-editor::placeholder { color: #7185a3; }
+
+    .source-editor:focus-visible,
+    .input-mode-option:focus-visible,
+    .editor-action:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .editor-meta,
+    .editor-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .editor-meta { color: var(--muted); font-size: 11px; }
+    .editor-meta .invalid { color: #ff9ca8; }
+
+    .editor-action {
+      border: 1px solid #29496f;
+      border-radius: 8px;
+      padding: 7px 10px;
+      background: linear-gradient(135deg, #14243a, #111b2c);
+      color: #dceaff;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .selected-filename {
+      overflow-wrap: anywhere;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+
+
+    input[type="file"] {
+
+      width: 100%;
+
+      color: var(--muted);
+
+      font-size: 12px;
+
+    }
+
+
+
+    .primary {
+
+      border: 0;
+
+      width: 100%;
+
+      margin-top: 22px;
+
+      padding: 13px 15px;
+
+      border-radius: 11px;
+
+      background: linear-gradient(100deg, var(--accent), var(--accent-2));
+
+      color: #0b1020;
+
+      font-weight: 800;
+
+      cursor: pointer;
+
+    }
+
+
+
+    .primary:disabled {
+
+      opacity: .6;
+
+      cursor: wait;
+
+    }
+
+
+
+    .privacy {
+
+      margin-top: 13px;
+
+      color: #75849c;
+
+      font-size: 11px;
+
+      line-height: 1.5;
+
+    }
+
+
+
+    .right {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 14px;
+
+      min-width: 0;
+
+    }
+
+
+
+    .empty {
+
+      min-height: 320px;
+
+      display: grid;
+
+      place-items: center;
+
+      text-align: center;
+
+    }
+
+
+
+    .empty .symbol {
+
+      font-size: 34px;
+
+      margin-bottom: 12px;
+
+    }
+
+
+
+    .empty h2 {
+
+      font-size: 20px;
+
+    }
+
+
+
+    .empty p {
+
+      color: var(--muted);
+
+      font-size: 13px;
+
+      max-width: 370px;
+
+      line-height: 1.6;
+
+    }
+
+
+
+    .hidden {
+
+      display: none !important;
+
+    }
+
+    .view-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #0c121d;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .view-tab {
+      flex: 0 0 auto;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      padding: 9px 12px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .view-tab[aria-selected="true"] {
+      color: var(--text);
+      background: #1a2740;
+      border-color: #34486e;
+    }
+
+    .view-tab:focus-visible,
+    button:focus-visible,
+    summary:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .report-view {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .report-view[hidden] {
+      display: none;
+    }
+
+    .report-disclosure {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(17, 23, 34, .72);
+      overflow: hidden;
+    }
+
+    .report-disclosure > summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 17px;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 750;
+      list-style-position: inside;
+    }
+
+    .report-disclosure[open] > summary {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .report-disclosure > .panel {
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .table-scroll,
+    .ast-tree-scroll,
+    .symbol-table-scroll {
+      max-height: min(62vh, 560px);
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #0c121d;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    .report-table th,
+    .report-table td {
+      padding: 9px 11px;
+      border-bottom: 1px solid #202b3d;
+      vertical-align: top;
+    }
+
+    .report-table th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #141d2c;
+      color: #c7d4e9;
+      font-size: 11px;
+    }
+
+    .report-table td {
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .table-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .ast-tree {
+      padding: 12px;
+      color: #d9e4f8;
+      font: 12px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+
+    .ast-tree details {
+      margin: 2px 0 2px 10px;
+      padding-left: 9px;
+      border-left: 1px solid #28364d;
+    }
+
+    .ast-tree summary {
+      cursor: pointer;
+      color: #b8c8ff;
+      overflow-wrap: anywhere;
+    }
+
+    .ast-leaf {
+      margin: 3px 0 3px 22px;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    .symbol-groups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .symbol-group h3 {
+      margin: 0 0 8px;
+      font-size: 13px;
+    }
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .source-grid > .panel {
+      min-width: 0;
+    }
+
+    .code {
+      max-height: min(70vh, 720px);
+      margin: 0;
+    }
+
+
+
+    .result-head {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      gap: 16px;
+
+      align-items: flex-start;
+
+    }
+
+
+
+    .status {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 7px;
+
+      border-radius: 999px;
+
+      padding: 7px 10px;
+
+      font-size: 11px;
+
+      color: var(--green);
+
+      background: #15352d;
+
+      border: 1px solid #245b4a;
+
+    }
+
+
+
+    .status.failed {
+
+      color: var(--red);
+
+      background: #3a1c27;
+
+      border-color: #6e3444;
+
+    }
+
+
+
+    .stats {
+
+      display: grid;
+
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+
+      gap: 10px;
+
+      margin-top: 20px;
+
+    }
+
+
+
+    .stat {
+
+      background: #0c121d;
+
+      border: 1px solid var(--line);
+
+      border-radius: 13px;
+
+      padding: 13px;
+
+      min-width: 0;
+
+    }
+
+
+
+    .stat .number {
+
+      font-size: 25px;
+
+      font-weight: 800;
+
+      letter-spacing: -.04em;
+
+    }
+
+
+
+    .stat .label {
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+      margin-top: 4px;
+
+    }
+
+
+
+    .stages {
+
+      display: grid;
+
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      gap: 10px;
+
+    }
+
+
+
+    .stage {
+
+      border: 1px solid var(--line);
+
+      background: #0c121d;
+
+      border-radius: 13px;
+
+      padding: 14px;
+
+    }
+
+
+
+    .stage-top {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+      font-size: 13px;
+
+      font-weight: 750;
+
+    }
+
+
+
+    .dot {
+
+      width: 8px;
+
+      height: 8px;
+
+      border-radius: 50%;
+
+      background: var(--green);
+
+      flex-shrink: 0;
+
+    }
+
+
+
+    .dot.failed {
+
+      background: var(--red);
+
+    }
+
+
+
+    .stage p {
+
+      color: var(--muted);
+
+      font-size: 12px;
+
+      line-height: 1.5;
+
+      margin: 9px 0 0;
+
+      overflow-wrap: anywhere;
+
+    }
+
+
+
+    .section-title {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 12px;
+
+      margin-bottom: 14px;
+
+    }
+
+
+
+    .section-title h2 {
+
+      margin: 0;
+
+    }
+
+
+
+    .count {
+
+      color: var(--muted);
+
+      font-size: 11px;
+
+    }
+
+
+
+    .items {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 9px;
+
+    }
+
+
+
+    .item {
+
+      border: 1px solid var(--line);
+
+      background: #0c121d;
+
+      padding: 12px 13px;
+
+      border-radius: 11px;
+
+    }
+
+
+
+    .item-head {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      align-items: center;
+
+      gap: 8px;
+
+      margin-bottom: 6px;
+
+    }
+
+
+
+    .tag {
+
+      font-size: 10px;
+
+      padding: 4px 7px;
+
+      border-radius: 6px;
+
+      background: #202b42;
+
+      color: #bfd0ff;
+
+    }
+
+
+
+    .tag.warning {
+
+      color: var(--yellow);
+
+      background: #3b3020;
+
+    }
+
+
+
+    .tag.error {
+
+      color: var(--red);
+
+      background: #3b2029;
+
+    }
+
+
+
+    .item p {
+
+      margin: 0;
+
+      font-size: 12px;
+
+      color: #c3cee0;
+
+      line-height: 1.55;
+
+      overflow-wrap: anywhere;
+
+    }
+
+
+
+    .code {
+
+      white-space: pre;
+
+      overflow: auto;
+
+      max-height: 430px;
+
+      background: #080c13;
+
+      border: 1px solid var(--line);
+
+      border-radius: 12px;
+
+      padding: 16px;
+
+      font: 12px/1.7 ui-monospace, SFMono-Regular, Consolas, monospace;
+
+      color: #c9d8ff;
+
+    }
+
+
+
+    .secondary {
+
+      border: 1px solid #3c4b67;
+
+      color: #dbe5ff;
+
+      background: #182235;
+
+      padding: 9px 12px;
+
+      border-radius: 9px;
+
+      cursor: pointer;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+    }
+
+
+
+    .alert {
+
+      padding: 12px 14px;
+
+      border: 1px solid #6e3444;
+
+      background: #3a1c27;
+
+      color: #ffd6dc;
+
+      border-radius: 11px;
+
+      font-size: 13px;
+
+      line-height: 1.5;
+
+    }
+
+
+
+    footer {
+
+      margin-top: 32px;
+
+      color: #66758d;
+
+      font-size: 11px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      gap: 12px;
+
+    }
+
+
+
+    @media (max-width: 1050px) {
+
+      .layout {
+
+        grid-template-columns: minmax(220px, 270px) minmax(0, 1fr);
+
+      }
+
+
+
+    }
+
+    @media (max-width: 800px) {
+      .layout,
+      .source-grid,
+      .symbol-groups {
+        grid-template-columns: 1fr;
+      }
+
+      .stages {
+        max-height: 360px;
+        overflow: auto;
+      }
+
+    }
+
+
+
+    @media (max-width: 520px) {
+
+      .shell {
+
+        padding: 20px 13px 36px;
+
+      }
+
+
+
+      .panel {
+
+        padding: 15px;
+
+      }
+
+
+
+      .stats {
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      }
+
+
+
+      .stages {
+
+        grid-template-columns: 1fr;
+
+      }
+
+
+
+      header {
+
+        align-items: flex-start;
+
+      }
+
+
+
+      .pill {
+
+        display: none;
+
+      }
+
+      .view-tabs {
+        margin-inline: -2px;
+      }
+
+    }
+
+    /* Reference palette and compact workspace refinements. */
+    body {
+      background:
+        radial-gradient(ellipse at 12% -12%, rgba(23, 105, 255, .2) 0, transparent 42%),
+        radial-gradient(ellipse at 88% 0%, rgba(118, 84, 255, .09) 0, transparent 34%),
+        var(--bg);
+    }
+
+    .shell {
+      max-width: 1800px;
+      padding: 16px clamp(14px, 2vw, 30px) 32px;
+    }
+
+    header { margin-bottom: 16px; }
+
+    .logo {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-strong), var(--accent-2));
+      box-shadow: 0 7px 22px rgba(23, 105, 255, .2);
+    }
+
+    .logo svg { width: 23px; height: 23px; display: block; }
+
+    .brand-name { color: var(--text); }
+
+    .header-context {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #c4d7f6;
+      border: 1px solid rgba(52, 136, 255, .22);
+      background: rgba(16, 27, 45, .74);
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 11px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .header-context::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(52, 136, 255, .6);
+    }
+
+    .pill {
+      color: #c4d7f6;
+      border-color: rgba(52, 136, 255, .25);
+      background: rgba(16, 27, 45, .78);
+    }
+
+    .hero { margin-bottom: 16px; }
+    .eyebrow { color: #74a9ff; }
+
+    h1 {
+      font-size: clamp(25px, 2.5vw, 36px);
+      letter-spacing: -.045em;
+      line-height: 1.08;
+      margin: 7px 0 8px;
+    }
+
+    .hero p { max-width: 760px; line-height: 1.55; font-size: 13px; }
+
+    .layout {
+      grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .panel {
+      background: linear-gradient(155deg, rgba(16, 27, 45, .97), rgba(9, 16, 28, .97));
+      border-color: rgba(52, 136, 255, .2);
+      border-radius: 17px;
+      box-shadow: 0 15px 38px rgba(0, 0, 0, .22);
+    }
+
+    select, .filebox, textarea {
+      border-color: #27466c;
+      background: var(--surface-soft);
+    }
+
+    .primary {
+      background: linear-gradient(105deg, var(--accent-strong), var(--accent-2));
+      color: #fff;
+      box-shadow: 0 8px 22px rgba(23, 105, 255, .17);
+      transition: filter .16s ease, transform .16s ease, box-shadow .16s ease;
+    }
+
+    .primary:hover:not(:disabled) {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(23, 105, 255, .23);
+    }
+
+    .privacy { color: #7185a3; }
+
+    .view-tabs {
+      gap: 4px;
+      background: rgba(10, 18, 32, .9);
+    }
+
+    .view-tab[aria-selected="true"] {
+      color: var(--text);
+      background: linear-gradient(110deg, rgba(23, 105, 255, .9), rgba(71, 105, 232, .88) 65%, rgba(118, 84, 255, .84));
+      border-color: rgba(116, 169, 255, .6);
+      box-shadow: 0 4px 14px rgba(23, 105, 255, .18);
+    }
+
+    .report-disclosure {
+      border-color: rgba(52, 136, 255, .19);
+      background: rgba(13, 20, 34, .78);
+    }
+
+    .report-table th { background: #101b2d; color: #c7d9f4; }
+    .table-scroll, .ast-tree-scroll, .symbol-table-scroll { background: #09111e; }
+
+    .stat {
+      background: linear-gradient(145deg, rgba(16, 27, 45, .95), rgba(9, 16, 28, .95));
+      border-color: rgba(52, 136, 255, .2);
+    }
+
+    .stats { margin-top: 13px; }
+
+    .stage { background: rgba(9, 17, 30, .86); }
+
+    .item {
+      border-color: rgba(52, 136, 255, .17);
+      background: rgba(9, 17, 30, .84);
+    }
+
+    .code {
+      background: #080f1b;
+      border-color: rgba(52, 136, 255, .23);
+    }
+
+    .secondary {
+      border-color: #29496f;
+      color: #dceaff;
+      background: linear-gradient(135deg, #14243a, #111b2c);
+      transition: border-color .15s ease, background .15s ease, transform .15s ease;
+    }
+
+    .secondary:hover:not(:disabled) {
+      border-color: #458ce5;
+      background: linear-gradient(135deg, #193359, #1a2440);
+      transform: translateY(-1px);
+    }
+
+    .alert {
+      border-color: #633747;
+      background: linear-gradient(135deg, #2a1825, #201521);
+    }
+
+    footer { margin-top: 22px; }
+
+    .ast-view-intro { min-width: 0; }
+
+    .ast-explorer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(250px, .72fr);
+      gap: 14px;
+      min-width: 0;
+      align-items: start;
+    }
+
+    .ast-graph-card, .ast-node-details { min-width: 0; }
+    .ast-graph-card > .section-title { margin-bottom: 12px; }
+
+    .ast-toolbar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .ast-control-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px;
+      border: 1px solid rgba(52, 136, 255, .19);
+      border-radius: 10px;
+      background: rgba(7, 13, 24, .72);
+    }
+
+    .ast-control-button {
+      min-width: 32px;
+      min-height: 31px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      padding: 5px 9px;
+      color: #c9dcfa;
+      background: transparent;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .ast-control-button:hover:not(:disabled) {
+      color: #fff;
+      border-color: rgba(52, 136, 255, .4);
+      background: rgba(23, 105, 255, .17);
+    }
+
+    .ast-control-button:disabled { opacity: .42; cursor: default; }
+
+    .ast-zoom-value {
+      min-width: 42px;
+      color: #aac4e8;
+      text-align: center;
+      font: 10px ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+
+    .ast-pan-controls {
+      display: grid;
+      grid-template-columns: repeat(3, 29px);
+      grid-template-rows: repeat(2, 28px);
+      gap: 2px;
+    }
+
+    .ast-pan-controls .ast-control-button { min-width: 28px; min-height: 26px; padding: 2px; }
+    #ast-pan-up { grid-column: 2; grid-row: 1; }
+    #ast-pan-left { grid-column: 1; grid-row: 2; }
+    #ast-pan-down { grid-column: 2; grid-row: 2; }
+    #ast-pan-right { grid-column: 3; grid-row: 2; }
+
+    .ast-graph-viewport {
+      width: 100%;
+      height: min(66vh, 660px);
+      min-height: 400px;
+      overflow: auto;
+      border: 1px solid rgba(52, 136, 255, .25);
+      border-radius: 13px;
+      background:
+        radial-gradient(circle at 16% 12%, rgba(23, 105, 255, .1), transparent 35%),
+        linear-gradient(145deg, #091221, #080f1b 72%);
+      scrollbar-color: #315987 #0a1220;
+      scrollbar-width: thin;
+    }
+
+    .ast-graph-viewport:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .ast-graph { display: block; max-width: none; overflow: visible; user-select: none; }
+    .ast-edge { fill: none; stroke: #315784; stroke-width: 2; vector-effect: non-scaling-stroke; }
+    .ast-node { cursor: pointer; outline: none; }
+
+    .ast-node rect {
+      fill: #0e192a;
+      stroke: #315784;
+      stroke-width: 1.4;
+      vector-effect: non-scaling-stroke;
+      transition: stroke .14s ease, fill .14s ease, filter .14s ease;
+    }
+
+    .ast-node.declaration rect { fill: #0d2038; stroke: #3488ff; }
+    .ast-node.statement rect { fill: #0d222c; stroke: #42bfd0; }
+    .ast-node.expression rect { fill: #1b1731; stroke: #9275ff; }
+    .ast-node.identifier rect { fill: #102731; stroke: #51c8db; }
+    .ast-node.literal rect { fill: #2c2419; stroke: #d8ae58; }
+
+    .ast-node:hover rect, .ast-node:focus-visible rect { stroke: #8bc2ff; stroke-width: 2; }
+
+    .ast-node.selected rect {
+      stroke: #70b5ff;
+      stroke-width: 2.5;
+      filter: drop-shadow(0 0 8px rgba(52, 136, 255, .32));
+    }
+
+    .ast-node-kind { fill: #f0f6ff; font: 700 12px Inter, system-ui, sans-serif; pointer-events: none; }
+    .ast-node-summary { fill: #9bb2d1; font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; pointer-events: none; }
+    .ast-node-expander { fill: #132a47; stroke: #5797e5; stroke-width: 1; vector-effect: non-scaling-stroke; }
+    .ast-node-expander-label { fill: #e6f1ff; font: 700 12px ui-monospace, SFMono-Regular, Consolas, monospace; pointer-events: none; }
+
+    .ast-graph-message { min-height: 18px; margin: 8px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+
+    .ast-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 10px; color: var(--muted); font-size: 10px; }
+    .ast-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+    .ast-swatch { width: 10px; height: 10px; border: 1px solid currentColor; border-radius: 3px; background: rgba(16, 27, 45, .85); }
+    .ast-swatch.declaration { color: #3488ff; }
+    .ast-swatch.statement { color: #42bfd0; }
+    .ast-swatch.expression { color: #9275ff; }
+    .ast-swatch.identifier { color: #51c8db; }
+    .ast-swatch.literal { color: #d8ae58; }
+
+    .ast-node-details { position: sticky; top: 14px; }
+    .ast-node-details-intro { color: var(--muted); font-size: 12px; line-height: 1.55; margin: 0 0 12px; }
+    .ast-detail-list { display: flex; flex-direction: column; gap: 8px; margin: 0; }
+
+    .ast-detail-row {
+      display: grid;
+      grid-template-columns: minmax(82px, .6fr) minmax(0, 1.4fr);
+      gap: 10px;
+      padding: 9px 10px;
+      border: 1px solid rgba(52, 136, 255, .16);
+      border-radius: 9px;
+      background: rgba(7, 13, 24, .52);
+      font-size: 11px;
+    }
+
+    .ast-detail-row dt { color: #9db5d5; font-weight: 700; }
+    .ast-detail-row dd { margin: 0; color: #e0ebfb; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
+
+    .ast-outline-disclosure {
+      margin-top: 12px;
+      border: 1px solid rgba(52, 136, 255, .18);
+      border-radius: 12px;
+      background: rgba(13, 20, 34, .78);
+    }
+
+    .ast-outline-disclosure > summary { padding: 12px 14px; color: #c4d7f6; cursor: pointer; font-size: 12px; font-weight: 700; }
+    .ast-outline-disclosure .ast-tree-scroll { margin: 0 12px 12px; }
+
+    @media (max-width: 1120px) {
+      .layout { grid-template-columns: minmax(220px, 250px) minmax(0, 1fr); }
+    }
+
+    @media (max-width: 820px) {
+      .layout, .source-grid, .symbol-groups, .ast-explorer-grid { grid-template-columns: 1fr; }
+      .ast-node-details { position: static; }
+      .ast-graph-viewport { height: 56vh; min-height: 340px; }
+    }
+
+    @media (max-width: 520px) {
+      .shell { padding: 14px 12px 28px; }
+      .panel { padding: 15px; }
+      header { align-items: center; margin-bottom: 14px; }
+      .header-context { font-size: 9px; padding: 6px 8px; }
+      h1 { font-size: clamp(24px, 8vw, 31px); }
+      .view-tabs { margin-inline: -2px; }
+      .view-tab { padding: 8px 10px; }
+      .ast-toolbar { align-items: flex-start; }
+      .ast-graph-viewport { min-height: 310px; }
+      .ast-node-details .ast-detail-row { grid-template-columns: minmax(70px, .55fr) minmax(0, 1.45fr); }
+    }
+
+  </style>
+
+</head>
+
+
+
+<body>
+
+  <div class="shell">
+
+
+
+    <header>
+
+      <div class="brand">
+
+        <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 8.25 9.2 4l4.35 4.25-4.3 4.3L5 8.25Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m10.45 15.7 4.3-4.3L19 15.7 14.7 20l-4.25-4.3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m13.55 8.1 2.2-2.2 3.2 3.2-2.2 2.2M4.95 15.7l2.2-2.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+        <span>MiniChain</span>
+
+      </div>
+
+      <div class="header-context">Local analysis · V1</div>
+
+    </header>
+
+
+
+    <section class="hero">
+
+      <div class="eyebrow">Compiler workspace</div>
+
+      <h1>
+
+        Understand your contract.<br>
+
+        <span style="color:#9eafff">Optimize with confidence.</span>
+
+      </h1>
+
+      <p>
+
+        Run lexical, syntax, semantic, and domain-specific checks on
+
+        your MiniChain source, review optimization results, and export
+
+        the transformed source code.
+
+      </p>
+
+    </section>
+
+
+
+    <div class="layout">
+
+
+
+      <section class="panel">
+
+        <h2>Analyze a contract</h2>
+
+        <p class="sub">
+
+          Paste MiniChain source or upload a file, then choose the ruleset to apply.
+
+        </p>
+
+
+
+        <form id="analyze-form">
+
+
+
+          <label for="domain">Application domain</label>
+
+
+
+          <select id="domain" name="domain">
+
+            <option value="banking">Banking / Finance</option>
+
+            <option value="supply_chain">Supply Chain</option>
+
+            <option value="voting">Voting / Governance</option>
+
+
+          </select>
+
+
+
+          <div class="input-mode-switch" role="group" aria-label="Source input mode">
+            <button id="paste-mode-button" class="input-mode-option" type="button"
+                    aria-pressed="false" aria-controls="paste-source-panel">Paste Code</button>
+            <button id="upload-mode-button" class="input-mode-option" type="button"
+                    aria-pressed="true" aria-controls="upload-source-panel">Upload File</button>
+          </div>
+
+          <div id="paste-source-panel" class="hidden">
+            <label for="pasted-source">MiniChain source code</label>
+            <textarea id="pasted-source" class="source-editor" rows="12"
+                      placeholder="Paste your MiniChain contract here..."
+                      spellcheck="false" autocomplete="off" disabled></textarea>
+            <div class="editor-meta">
+              <span id="paste-validation" role="status" aria-live="polite">Paste source code to begin.</span>
+              <span id="paste-character-count">0 characters</span>
+            </div>
+            <div class="editor-actions">
+              <span class="privacy">Line breaks and indentation are preserved.</span>
+              <div style="display:flex;gap:7px">
+                <button id="load-example-source" class="editor-action" type="button">Load Example</button>
+                <button id="clear-pasted-source" class="editor-action" type="button">Clear</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="upload-source-panel">
+            <label for="source_file">Source file</label>
+            <div class="filebox">
+              <strong>Choose a .mc or .txt file</strong>
+              <span>UTF-8 text · Maximum 1 MB</span>
+              <input id="source_file" name="source_file" type="file"
+                     accept=".mc,.txt,text/plain">
+            </div>
+            <p id="selected-filename" class="selected-filename" aria-live="polite">No file selected.</p>
+          </div>
+
+
+
+          <button
+
+            class="primary"
+
+            id="analyze-button"
+
+            type="submit"
+
+          >
+
+            Run compiler analysis ↗
+
+          </button>
+
+
+
+          <p class="privacy">
+
+            Your source is processed by this local development server.
+
+            This prototype does not save uploaded source files to disk.
+
+          </p>
+
+
+
+        </form>
+
+      </section>
+
+
+
+      <div class="right">
+
+
+
+        <section id="empty-state" class="panel empty">
+
+          <div>
+
+            <div class="symbol">⌘</div>
+
+            <h2>Your analysis workspace is ready</h2>
+
+            <p>
+
+              Choose a source file and run the compiler. Your stage-by-stage
+
+              results, domain findings, optimizations, and generated code
+
+              will appear here.
+
+            </p>
+
+          </div>
+
+        </section>
+
+
+
+        <div id="error-box" class="alert hidden" role="alert"></div>
+
+
+
+        <section id="results" class="panel hidden">
+
+          <div class="result-head">
+
+            <div>
+
+              <h2 id="result-title">Analysis results</h2>
+
+              <p
+
+                class="sub"
+
+                id="result-sub"
+
+                style="margin:7px 0 0"
+
+              ></p>
+
+            </div>
+
+
+
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <button id="repair-button" class="secondary hidden" type="button">
+                Automatic Repair
+              </button>
+              <span id="overall-status" class="status">✓ Completed</span>
+            </div>
+
+          </div>
+
+
+
+          <div class="stats">
+
+            <div class="stat">
+
+              <div class="number" id="stat-errors">0</div>
+
+              <div class="label">Errors</div>
+
+            </div>
+
+
+
+            <div class="stat">
+
+              <div class="number" id="stat-issues">0</div>
+
+              <div class="label">Domain issues</div>
+
+            </div>
+
+
+
+            <div class="stat">
+
+              <div class="number" id="stat-optimizations">0</div>
+
+              <div class="label">Optimizations</div>
+
+            </div>
+
+
+
+            <div class="stat">
+
+              <div class="number" id="stat-warnings">0</div>
+
+              <div class="label">Warnings</div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <div id="analysis-tabs" class="view-tabs hidden" role="tablist" aria-label="Compiler analysis reports">
+          <button id="tab-overview" class="view-tab" type="button" role="tab"
+                  aria-controls="view-overview" aria-selected="true" tabindex="0" data-view="overview">
+            Overview
+          </button>
+          <button id="tab-lexical" class="view-tab" type="button" role="tab"
+                  aria-controls="view-lexical" aria-selected="false" tabindex="-1" data-view="lexical">
+            Lexical Analysis
+          </button>
+          <button id="tab-ast" class="view-tab" type="button" role="tab"
+                  aria-controls="view-ast" aria-selected="false" tabindex="-1" data-view="ast">
+            AST Explorer
+          </button>
+          <button id="tab-semantic" class="view-tab" type="button" role="tab"
+                  aria-controls="view-semantic" aria-selected="false" tabindex="-1" data-view="semantic">
+            Semantic Analysis
+          </button>
+          <button id="tab-source" class="view-tab" type="button" role="tab"
+                  aria-controls="view-source" aria-selected="false" tabindex="-1" data-view="source">
+            Optimized Source
+          </button>
+        </div>
+
+        <section id="view-overview" class="report-view hidden" role="tabpanel"
+                 aria-labelledby="tab-overview" tabindex="0">
+
+        <details id="stage-disclosure" class="report-disclosure">
+        <summary>Compiler pipeline</summary>
+        <section id="stage-panel" class="panel hidden">
+
+          <div class="section-title">
+
+            <h2>Compiler pipeline</h2>
+
+            <span class="count">STAGE STATUS</span>
+
+          </div>
+
+          <div id="stages" class="stages"></div>
+
+        </section>
+        </details>
+
+
+        <details id="domain-disclosure" class="report-disclosure">
+        <summary>Domain findings</summary>
+        <section id="issues-panel" class="panel hidden">
+
+          <div class="section-title">
+
+            <h2>Domain findings</h2>
+
+            <span class="count" id="issues-count"></span>
+
+          </div>
+
+          <div id="issues" class="items"></div>
+
+        </section>
+        </details>
+
+
+        <details id="optimization-disclosure" class="report-disclosure">
+        <summary>Optimization report</summary>
+        <section id="optimizations-panel" class="panel hidden">
+
+          <div class="section-title">
+
+            <h2>Optimization report</h2>
+
+            <span class="count" id="optimizations-count"></span>
+
+          </div>
+
+          <div id="optimizations" class="items"></div>
+
+        </section>
+        </details>
+
+
+        <details id="warnings-disclosure" class="report-disclosure">
+        <summary>Warnings</summary>
+        <section id="warnings-panel" class="panel hidden">
+
+          <div class="section-title">
+
+            <h2>Warnings</h2>
+
+            <span class="count" id="warnings-count"></span>
+
+          </div>
+
+          <div id="warnings" class="items"></div>
+
+        </section>
+        </details>
+
+
+        <details id="errors-disclosure" class="report-disclosure">
+        <summary>Pipeline errors</summary>
+        <section id="errors-panel" class="panel hidden">
+
+          <div class="section-title">
+
+            <h2>Errors</h2>
+
+            <span class="count" id="errors-count"></span>
+
+          </div>
+
+          <div id="errors" class="items"></div>
+
+        </section>
+        </details>
+
+
+        <details id="repair-disclosure" class="report-disclosure hidden">
+        <summary>Automatic Repair</summary>
+        <section id="repair-panel" class="panel hidden">
+          <div class="section-title">
+            <h2>Automatic Repair</h2>
+            <span class="count" id="repair-count">Repair results</span>
+          </div>
+          <div id="repair-message" class="sub" style="margin-bottom:12px" aria-live="polite"></div>
+          <div class="section-title" style="margin-top:14px">
+            <h2>Applied repairs</h2>
+            <span class="count" id="repair-applied-count">0</span>
+          </div>
+          <div id="repair-applied" class="items"></div>
+          <div class="section-title" style="margin-top:14px">
+            <h2>Skipped rules</h2>
+            <span class="count" id="repair-skipped-count">0</span>
+          </div>
+          <div id="repair-skipped" class="items"></div>
+          <div class="section-title" style="margin-top:14px">
+            <h2>Rejected candidates</h2>
+            <span class="count" id="repair-rejected-count">0</span>
+          </div>
+          <div id="repair-rejected" class="items"></div>
+          <div id="repair-diagnostics" class="hidden" style="margin-top:16px">
+            <div class="section-title">
+              <h2>Revalidation findings</h2>
+            </div>
+            <div id="repair-errors-wrap" class="hidden">
+              <div class="section-title" style="margin-top:12px">
+                <h2>Compiler errors</h2>
+                <span class="count" id="repair-errors-count">0</span>
+              </div>
+              <div id="repair-errors" class="items"></div>
+            </div>
+            <div id="repair-domain-wrap" class="hidden">
+              <div class="section-title" style="margin-top:12px">
+                <h2>Remaining domain findings</h2>
+                <span class="count" id="repair-domain-count">0</span>
+              </div>
+              <div id="repair-domain-findings" class="items"></div>
+            </div>
+          </div>
+          <div id="repaired-code-wrap" class="hidden" style="margin-top:14px">
+            <div class="section-title">
+              <h2 id="repaired-code-title">Repaired MiniChain source</h2>
+              <button id="download-repaired-button" class="secondary hidden" type="button">
+                Download repaired .mc
+              </button>
+            </div>
+            <pre id="repaired-code" class="code"></pre>
+          </div>
+          <p class="privacy">
+            Automatic repairs are conservative suggestions, not a security guarantee.
+            Review the source and re-analysis before using it.
+          </p>
+        </section>
+        </details>
+
+        </section>
+
+        <section id="view-lexical" class="report-view hidden" role="tabpanel"
+                 aria-labelledby="tab-lexical" tabindex="0">
+          <section class="panel">
+            <div class="section-title">
+              <h2>Lexer tokens</h2>
+              <span id="token-count" class="count">Not run</span>
+            </div>
+            <p id="token-report-message" class="sub" style="margin-bottom:12px"></p>
+            <div class="table-scroll" role="region" aria-label="Lexer token table" tabindex="0">
+              <table class="report-table">
+                <thead>
+                  <tr><th>#</th><th>Type</th><th>Value</th><th>Line</th><th>Column</th></tr>
+                </thead>
+                <tbody id="token-rows"></tbody>
+              </table>
+            </div>
+            <div class="table-controls">
+              <button id="token-prev" class="secondary" type="button">Previous</button>
+              <span id="token-page-status" class="count" aria-live="polite"></span>
+              <button id="token-next" class="secondary" type="button">Next</button>
+            </div>
+          </section>
+        </section>
+
+        <section id="view-ast" class="report-view hidden" role="tabpanel"
+                 aria-labelledby="tab-ast" tabindex="0">
+          <div class="ast-view-intro">
+            <div class="section-title">
+              <h2>Parsed AST</h2>
+              <span id="ast-status" class="count">Not run</span>
+            </div>
+            <p id="ast-report-message" class="sub" style="margin-bottom:12px"></p>
+            <div class="ast-explorer-grid">
+              <section class="panel ast-graph-card" aria-label="AST diagram and controls">
+                <div class="section-title">
+                  <h2>AST structure</h2>
+                  <span id="ast-graph-count" class="count">No nodes</span>
+                </div>
+                <div class="ast-toolbar" role="toolbar" aria-label="AST diagram controls">
+                  <div class="ast-control-group" aria-label="Zoom controls">
+                    <button id="ast-zoom-out" class="ast-control-button" type="button" aria-label="Zoom out">−</button>
+                    <span id="ast-zoom-value" class="ast-zoom-value" aria-live="polite">100%</span>
+                    <button id="ast-zoom-in" class="ast-control-button" type="button" aria-label="Zoom in">+</button>
+                  </div>
+                  <div class="ast-control-group ast-pan-controls" role="group" aria-label="Pan diagram">
+                    <button id="ast-pan-up" class="ast-control-button" type="button" aria-label="Pan up">↑</button>
+                    <button id="ast-pan-left" class="ast-control-button" type="button" aria-label="Pan left">←</button>
+                    <button id="ast-pan-down" class="ast-control-button" type="button" aria-label="Pan down">↓</button>
+                    <button id="ast-pan-right" class="ast-control-button" type="button" aria-label="Pan right">→</button>
+                  </div>
+                  <div class="ast-control-group">
+                    <button id="ast-fit" class="ast-control-button" type="button">Fit to view</button>
+                    <button id="ast-reset" class="ast-control-button" type="button">Reset</button>
+                  </div>
+                  <div class="ast-control-group">
+                    <button id="ast-expand-all" class="ast-control-button" type="button">Expand all</button>
+                    <button id="ast-collapse-all" class="ast-control-button" type="button">Collapse all</button>
+                  </div>
+                </div>
+                <div id="ast-graph-viewport" class="ast-graph-viewport" role="region" aria-label="Interactive AST diagram" tabindex="0">
+                  <svg id="ast-graph" class="ast-graph" role="group" aria-label="AST graph. Select a node to inspect its fields."></svg>
+                </div>
+                <p id="ast-graph-message" class="ast-graph-message" aria-live="polite">Select a node to inspect it. Expand branches to reveal child nodes.</p>
+                <div class="ast-legend" aria-label="AST node categories">
+                  <span class="ast-legend-item"><i class="ast-swatch declaration"></i>Declarations</span>
+                  <span class="ast-legend-item"><i class="ast-swatch statement"></i>Statements</span>
+                  <span class="ast-legend-item"><i class="ast-swatch expression"></i>Expressions</span>
+                  <span class="ast-legend-item"><i class="ast-swatch identifier"></i>Identifiers</span>
+                  <span class="ast-legend-item"><i class="ast-swatch literal"></i>Literals</span>
+                </div>
+              </section>
+              <aside class="panel ast-node-details" aria-live="polite">
+                <div class="section-title">
+                  <h2>Node details</h2>
+                  <span id="ast-node-kind" class="count">No selection</span>
+                </div>
+                <p id="ast-node-intro" class="ast-node-details-intro">Select an AST node to inspect the fields from the parsed compiler tree.</p>
+                <dl id="ast-node-fields" class="ast-detail-list"></dl>
+              </aside>
+            </div>
+            <details class="ast-outline-disclosure">
+              <summary>Accessible AST outline</summary>
+              <div class="ast-tree-scroll">
+                <div id="ast-tree" class="ast-tree"></div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section id="view-semantic" class="report-view hidden" role="tabpanel"
+                 aria-labelledby="tab-semantic" tabindex="0">
+          <section class="panel">
+            <div class="section-title">
+              <h2>Semantic diagnostics</h2>
+              <span id="semantic-status" class="count">Not run</span>
+            </div>
+            <div id="semantic-diagnostics" class="items"></div>
+          </section>
+          <section class="panel">
+            <div class="section-title">
+              <h2>Contract symbols and types</h2>
+              <span id="symbol-status" class="count"></span>
+            </div>
+            <p id="symbol-message" class="sub" style="margin-bottom:12px"></p>
+            <div id="semantic-symbols" class="symbol-groups"></div>
+          </section>
+        </section>
+
+        <section id="view-source" class="report-view hidden" role="tabpanel"
+                 aria-labelledby="tab-source" tabindex="0">
+          <div class="source-grid">
+            <section class="panel">
+              <div class="section-title">
+                <h2>Original MiniChain source</h2>
+                <span id="original-source-name" class="count"></span>
+              </div>
+              <pre id="original-code" class="code"></pre>
+            </section>
+
+        <section id="code-panel" class="panel hidden">
+
+          <div class="section-title">
+
+            <div>
+
+              <h2>Optimized MiniChain source</h2>
+
+              <div class="count" style="margin-top:5px">
+
+                Generated from the optimized AST
+
+              </div>
+
+            </div>
+
+
+
+            <button
+
+              id="download-button"
+
+              class="secondary"
+
+              type="button"
+
+            >
+
+              ↓ Download .mc
+
+            </button>
+
+          </div>
+
+
+
+          <pre id="optimized-code" class="code"></pre>
+
+        </section>
+
+            <section id="optimized-unavailable" class="panel hidden">
+              <h2>Optimized output unavailable</h2>
+              <p class="sub" style="margin:8px 0 0">
+                The compiler pipeline stopped before validated optimized source was produced.
+              </p>
+            </section>
+
+          </div>
+        </section>
+
+
+
+      </div>
+
+    </div>
+
+
+
+    <footer>
+
+      <span>MiniChain · Compiler workspace</span>
+
+      <span>Prototype · Local development</span>
+
+    </footer>
+
+
+
+  </div>
+
+
+
+  <script>
+
+    const form = document.getElementById("analyze-form");
+
+    const button = document.getElementById("analyze-button");
+
+
+
+    let optimizedCode = "";
+
+    let outputFilename = "optimized_contract.mc";
+
+    let originalCode = "";
+
+    let lexicalTokens = [];
+
+    let tokenPage = 0;
+    let astRootModel = null;
+    let astModelsById = new Map();
+    let astExpandedNodeIds = new Set();
+    let astSvgNodesById = new Map();
+    let astSelectedNodeId = null;
+    let astGraphSize = { width: 0, height: 0 };
+    let astZoom = 1;
+
+    const TOKEN_PAGE_SIZE = 100;
+    const AST_GRAPH_NODE_LIMIT = 1500;
+    const MAX_SOURCE_BYTES = 1024 * 1024;
+    const EXAMPLE_SOURCE = `contract Bank {
+    state balance : int;
+    function deposit(amount : int) {
+        require(amount > 0);
+        balance = balance + amount;
+    }
+}`;
+
+    let inputMode = "upload";
+    let lastAnalyzedInput = null;
+
+    let repairedCode = "";
+
+    let repairedFilename = "repaired_contract.mc";
+
+    let repairOutputDownloadable = false;
+
+    let repairRequestId = 0;
+
+
+
+    const byId = (id) => document.getElementById(id);
+
+    function setInputMode(mode) {
+      inputMode = mode;
+      const pasteActive = mode === "paste";
+      byId("paste-mode-button").setAttribute("aria-pressed", String(pasteActive));
+      byId("upload-mode-button").setAttribute("aria-pressed", String(!pasteActive));
+      byId("paste-source-panel").classList.toggle("hidden", !pasteActive);
+      byId("upload-source-panel").classList.toggle("hidden", pasteActive);
+      byId("pasted-source").disabled = !pasteActive;
+      byId("source_file").disabled = pasteActive;
+      if (pasteActive) byId("pasted-source").focus();
+    }
+
+    function updatePasteSourceStatus() {
+      const source = byId("pasted-source").value;
+      const status = byId("paste-validation");
+      const byteLength = new Blob([source]).size;
+      byId("paste-character-count").textContent =
+        `${source.length.toLocaleString()} characters`;
+      status.classList.toggle("invalid", !source.trim() || byteLength > MAX_SOURCE_BYTES);
+      status.textContent = !source.trim()
+        ? "Paste source code to begin."
+        : byteLength > MAX_SOURCE_BYTES
+          ? "Source exceeds the 1 MB limit."
+          : "Source is ready to analyze.";
+    }
+
+    byId("paste-mode-button").addEventListener("click", () => setInputMode("paste"));
+    byId("upload-mode-button").addEventListener("click", () => setInputMode("upload"));
+    byId("pasted-source").addEventListener("input", updatePasteSourceStatus);
+    byId("clear-pasted-source").addEventListener("click", () => {
+      byId("pasted-source").value = "";
+      updatePasteSourceStatus();
+      byId("pasted-source").focus();
+    });
+    byId("load-example-source").addEventListener("click", () => {
+      byId("pasted-source").value = EXAMPLE_SOURCE;
+      byId("domain").value = "banking";
+      setInputMode("paste");
+      updatePasteSourceStatus();
+    });
+    byId("source_file").addEventListener("change", () => {
+      const selected = byId("source_file").files[0];
+      byId("selected-filename").textContent = selected
+        ? `${selected.name} · ${(selected.size / 1024).toFixed(1)} KB`
+        : "No file selected.";
+    });
+
+
+
+    const show = (id) => {
+
+      byId(id).classList.remove("hidden");
+
+    };
+
+
+
+    const hide = (id) => {
+
+      byId(id).classList.add("hidden");
+
+    };
+
+    const reportTabNames = ["overview", "lexical", "ast", "semantic", "source"];
+
+    function activateReportView(name, focusTab = false) {
+      if (!reportTabNames.includes(name)) return;
+
+      reportTabNames.forEach(viewName => {
+        const selected = viewName === name;
+        const tab = byId(`tab-${viewName}`);
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+
+        const panel = byId(`view-${viewName}`);
+        panel.classList.toggle("hidden", !selected);
+      });
+
+      if (focusTab) byId(`tab-${name}`).focus();
+    }
+
+    byId("analysis-tabs").addEventListener("click", event => {
+      const tab = event.target.closest("[role='tab'][data-view]");
+      if (tab) activateReportView(tab.dataset.view);
+    });
+
+    byId("analysis-tabs").addEventListener("keydown", event => {
+      const currentIndex = reportTabNames.findIndex(name =>
+        byId(`tab-${name}`).getAttribute("aria-selected") === "true"
+      );
+      let nextIndex = currentIndex;
+
+      if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % reportTabNames.length;
+      else if (event.key === "ArrowLeft") {
+        nextIndex = (currentIndex - 1 + reportTabNames.length) % reportTabNames.length;
+      } else if (event.key === "Home") nextIndex = 0;
+      else if (event.key === "End") nextIndex = reportTabNames.length - 1;
+      else return;
+
+      event.preventDefault();
+      activateReportView(reportTabNames[nextIndex], true);
+    });
+
+    function clearRepairResults() {
+      repairedCode = "";
+      repairedFilename = "repaired_contract.mc";
+      repairOutputDownloadable = false;
+
+      byId("repair-message").textContent = "";
+      byId("repair-count").textContent = "Repair results";
+      byId("repair-applied-count").textContent = "0";
+      byId("repair-skipped-count").textContent = "0";
+      byId("repair-rejected-count").textContent = "0";
+      byId("repair-applied").replaceChildren();
+      byId("repair-skipped").replaceChildren();
+      byId("repair-rejected").replaceChildren();
+
+      byId("repair-errors-count").textContent = "0";
+      byId("repair-domain-count").textContent = "0";
+      byId("repair-errors").replaceChildren();
+      byId("repair-domain-findings").replaceChildren();
+      byId("repaired-code").textContent = "";
+      byId("download-repaired-button").textContent = "Download repaired .mc";
+
+      hide("repair-diagnostics");
+      hide("repair-errors-wrap");
+      hide("repair-domain-wrap");
+      hide("repaired-code-wrap");
+      hide("download-repaired-button");
+    }
+
+    function clearDisplayedResults() {
+      optimizedCode = "";
+      outputFilename = "optimized_contract.mc";
+      originalCode = "";
+      lexicalTokens = [];
+      tokenPage = 0;
+      byId("optimized-code").textContent = "";
+      byId("optimized-unavailable").classList.add("hidden");
+      byId("original-code").textContent = "";
+      byId("token-rows").replaceChildren();
+      resetAstExplorer();
+      byId("semantic-diagnostics").replaceChildren();
+      byId("semantic-symbols").replaceChildren();
+      byId("stages").replaceChildren();
+
+      repairRequestId += 1;
+      clearRepairResults();
+      byId("repair-button").disabled = false;
+      byId("repair-button").textContent = "Automatic Repair";
+      [
+        "analysis-tabs",
+        "view-overview",
+        "view-lexical",
+        "view-ast",
+        "view-semantic",
+        "view-source",
+        "repair-disclosure",
+      ].forEach(hide);
+      [
+        "stage-disclosure",
+        "domain-disclosure",
+        "optimization-disclosure",
+        "warnings-disclosure",
+        "errors-disclosure",
+      ].forEach(id => { byId(id).open = false; });
+      byId("repair-disclosure").open = false;
+
+      [
+        "results",
+        "stage-panel",
+        "issues-panel",
+        "optimizations-panel",
+        "warnings-panel",
+        "errors-panel",
+        "repair-panel",
+        "code-panel"
+      ].forEach(hide);
+    }
+
+
+
+    function addItem(container, label, message, kind = "") {
+
+      const item = document.createElement("div");
+
+      item.className = "item";
+
+
+
+      const head = document.createElement("div");
+
+      head.className = "item-head";
+
+
+
+      if (label) {
+
+        const tag = document.createElement("span");
+
+        tag.className = "tag " + kind;
+
+        tag.textContent = label;
+
+        head.appendChild(tag);
+
+      }
+
+
+
+      const paragraph = document.createElement("p");
+
+      paragraph.textContent = message;
+
+
+
+      item.appendChild(head);
+
+      item.appendChild(paragraph);
+
+
+
+      container.appendChild(item);
+
+    }
+
+
+
+    function fillList(
+
+      containerId,
+
+      entries,
+
+      getLabel,
+
+      getMessage,
+
+      kind = ""
+
+    ) {
+
+      const container = byId(containerId);
+
+      container.replaceChildren();
+
+
+
+      if (!entries.length) {
+
+        addItem(
+
+          container,
+
+          "CLEAR",
+
+          "No findings in this category."
+
+        );
+
+        return;
+
+      }
+
+
+
+      entries.forEach(entry => {
+
+        addItem(
+
+          container,
+
+          getLabel(entry),
+
+          getMessage(entry),
+
+          kind
+
+        );
+
+      });
+
+    }
+
+    function renderTokenPage() {
+      const tbody = byId("token-rows");
+      tbody.replaceChildren();
+
+      const pageCount = Math.max(1, Math.ceil(lexicalTokens.length / TOKEN_PAGE_SIZE));
+      tokenPage = Math.min(tokenPage, pageCount - 1);
+      const start = tokenPage * TOKEN_PAGE_SIZE;
+      const end = Math.min(start + TOKEN_PAGE_SIZE, lexicalTokens.length);
+
+      if (lexicalTokens.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 5;
+        cell.textContent = "No token records are available.";
+        row.appendChild(cell);
+        tbody.appendChild(row);
+      } else {
+        const fragment = document.createDocumentFragment();
+        lexicalTokens.slice(start, end).forEach((token, offset) => {
+          const row = document.createElement("tr");
+          [
+            start + offset + 1,
+            token.type,
+            token.value === "" ? "(empty)" : JSON.stringify(token.value),
+            token.line,
+            token.column,
+          ].forEach(value => {
+            const cell = document.createElement("td");
+            cell.textContent = String(value);
+            row.appendChild(cell);
+          });
+          fragment.appendChild(row);
+        });
+        tbody.appendChild(fragment);
+      }
+
+      byId("token-page-status").textContent = lexicalTokens.length
+        ? `Showing ${start + 1}–${end} of ${lexicalTokens.length} tokens (including EOF)`
+        : "No tokens";
+      byId("token-prev").disabled = tokenPage === 0;
+      byId("token-next").disabled = tokenPage >= pageCount - 1;
+    }
+
+    byId("token-prev").addEventListener("click", () => {
+      if (tokenPage > 0) {
+        tokenPage -= 1;
+        renderTokenPage();
+      }
+    });
+
+    byId("token-next").addEventListener("click", () => {
+      if ((tokenPage + 1) * TOKEN_PAGE_SIZE < lexicalTokens.length) {
+        tokenPage += 1;
+        renderTokenPage();
+      }
+    });
+
+    function createAstValue(value, label, depth = 0) {
+      if (Array.isArray(value) || (value && typeof value === "object")) {
+        const details = document.createElement("details");
+        details.open = depth < 2;
+        const summary = document.createElement("summary");
+        summary.textContent = Array.isArray(value)
+          ? `${label}: ${value.length} item(s)`
+          : `${label}: ${value.kind || "AST node"}`;
+        details.appendChild(summary);
+
+        let populated = false;
+        const populate = () => {
+          if (populated) return;
+          populated = true;
+          const children = Array.isArray(value)
+            ? value.map((child, index) => [`[${index}]`, child])
+            : Object.entries(value).filter(([key]) => key !== "kind");
+          children.forEach(([key, child]) => {
+            details.appendChild(createAstValue(child, key, depth + 1));
+          });
+        };
+
+        details.addEventListener("toggle", () => {
+          if (details.open) populate();
+        });
+        if (details.open) populate();
+        return details;
+      }
+
+      const leaf = document.createElement("div");
+      leaf.className = "ast-leaf";
+      const shownValue = value === null ? "null" : JSON.stringify(value);
+      leaf.textContent = `${label}: ${shownValue}`;
+      return leaf;
+    }
+
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const AST_NODE_WIDTH = 220;
+    const AST_NODE_HEIGHT = 62;
+    const AST_HORIZONTAL_GAP = 76;
+    const AST_VERTICAL_GAP = 24;
+    const AST_GRAPH_MARGIN = 28;
+
+    function isSerializedAstNode(value) {
+      return value !== null && typeof value === "object" && !Array.isArray(value) &&
+        typeof value.kind === "string";
+    }
+
+    function buildAstGraphModel(serializedRoot) {
+      let nextId = 0;
+      astModelsById = new Map();
+
+      function buildNode(value, fieldPath) {
+        if (!isSerializedAstNode(value)) return null;
+        const model = {
+          id: `ast-node-${nextId++}`,
+          kind: value.kind,
+          fieldPath,
+          value,
+          children: [],
+        };
+        astModelsById.set(model.id, model);
+
+        const addChildren = (childValue, childPath) => {
+          if (isSerializedAstNode(childValue)) {
+            const child = buildNode(childValue, childPath);
+            if (child) model.children.push(child);
+          } else if (Array.isArray(childValue)) {
+            childValue.forEach((item, index) => addChildren(item, `${childPath}[${index}]`));
+          }
+        };
+
+        Object.entries(value).forEach(([key, childValue]) => {
+          if (key !== "kind") addChildren(childValue, `${fieldPath}.${key}`);
+        });
+        return model;
+      }
+
+      return buildNode(serializedRoot, "Program");
+    }
+
+    function astNodeCategory(kind) {
+      if (kind === "Identifier") return "identifier";
+      if (kind === "Literal") return "literal";
+      if (/Expression$|^FunctionCall$/.test(kind)) return "expression";
+      if (/Statement$|^Block$/.test(kind)) return "statement";
+      return "declaration";
+    }
+
+    function astNodeSummary(model) {
+      const fields = model.value;
+      const parts = [];
+      if (typeof fields.name === "string") parts.push(fields.name);
+      if (typeof fields.operator === "string") parts.push(fields.operator);
+      if (fields.value !== undefined && (fields.value === null || ["string", "number", "boolean"].includes(typeof fields.value))) {
+        parts.push(JSON.stringify(fields.value));
+      }
+      if (!parts.length && fields.type && typeof fields.type.name === "string") {
+        parts.push(fields.type.name);
+      }
+      if (!parts.length) parts.push(`${model.children.length} child node(s)`);
+      return parts.join(" · ").slice(0, 27);
+    }
+
+    function formatAstField(value) {
+      if (isSerializedAstNode(value)) {
+        const label = typeof value.name === "string" ? ` (${value.name})` : "";
+        return `${value.kind}${label}`;
+      }
+      if (Array.isArray(value)) {
+        const preview = value.slice(0, 6).map(formatAstField).join(", ");
+        return value.length > 6 ? `${preview}, … (${value.length} items)` : `[${preview}]`;
+      }
+      if (value && typeof value === "object") return JSON.stringify(value);
+      return JSON.stringify(value);
+    }
+
+    function renderAstNodeDetails(model) {
+      const fields = byId("ast-node-fields");
+      fields.replaceChildren();
+      if (!model) {
+        byId("ast-node-kind").textContent = "No selection";
+        byId("ast-node-intro").textContent = "Select an AST node to inspect the fields from the parsed compiler tree.";
+        return;
+      }
+
+      byId("ast-node-kind").textContent = model.kind;
+      byId("ast-node-intro").textContent =
+        `${model.fieldPath} · ${model.children.length} direct child node(s). Fields below come from the serialized parser AST.`;
+      Object.entries(model.value).forEach(([key, value]) => {
+        if (key === "kind") return;
+        const row = document.createElement("div");
+        row.className = "ast-detail-row";
+        const term = document.createElement("dt");
+        term.textContent = key;
+        const description = document.createElement("dd");
+        description.textContent = formatAstField(value);
+        row.append(term, description);
+        fields.appendChild(row);
+      });
+      if (!fields.childElementCount) {
+        const empty = document.createElement("p");
+        empty.className = "ast-node-details-intro";
+        empty.textContent = "This AST node has no additional fields.";
+        fields.appendChild(empty);
+      }
+    }
+
+    function setAstSelectedNode(id) {
+      if (!astModelsById.has(id)) return;
+      astSelectedNodeId = id;
+      astSvgNodesById.forEach((element, nodeId) => {
+        const selected = nodeId === id;
+        element.classList.toggle("selected", selected);
+        element.setAttribute("aria-pressed", String(selected));
+      });
+      renderAstNodeDetails(astModelsById.get(id));
+    }
+
+    function applyAstZoom() {
+      const svg = byId("ast-graph");
+      if (!astGraphSize.width || !astGraphSize.height) return;
+      svg.setAttribute("width", String(Math.ceil(astGraphSize.width * astZoom)));
+      svg.setAttribute("height", String(Math.ceil(astGraphSize.height * astZoom)));
+      byId("ast-zoom-value").textContent = `${Math.round(astZoom * 100)}%`;
+    }
+
+    function renderAstGraph() {
+      const svg = byId("ast-graph");
+      const viewport = byId("ast-graph-viewport");
+      const previousLeft = viewport.scrollLeft;
+      const previousTop = viewport.scrollTop;
+      const focusedId = document.activeElement && document.activeElement.dataset
+        ? document.activeElement.dataset.astNodeId
+        : null;
+      svg.replaceChildren();
+      astSvgNodesById = new Map();
+
+      const controls = [
+        "ast-zoom-out", "ast-zoom-in", "ast-pan-up", "ast-pan-left", "ast-pan-down",
+        "ast-pan-right", "ast-fit", "ast-reset", "ast-expand-all", "ast-collapse-all",
+      ];
+      controls.forEach(id => { byId(id).disabled = !astRootModel; });
+
+      if (!astRootModel) {
+        astGraphSize = { width: 0, height: 0 };
+        svg.setAttribute("width", "0");
+        svg.setAttribute("height", "0");
+        byId("ast-graph-count").textContent = "No nodes";
+        byId("ast-graph-message").textContent = "No AST was produced by the parser for this analysis.";
+        renderAstNodeDetails(null);
+        return;
+      }
+
+      const visible = [];
+      let leafY = AST_GRAPH_MARGIN;
+      let maxDepth = 0;
+      let wasCapped = false;
+
+      function place(model, depth) {
+        if (visible.length >= AST_GRAPH_NODE_LIMIT) {
+          wasCapped = true;
+          return null;
+        }
+        const position = { model, depth, children: [], x: 0, y: 0 };
+        visible.push(position);
+        maxDepth = Math.max(maxDepth, depth);
+        if (astExpandedNodeIds.has(model.id)) {
+          for (const child of model.children) {
+            if (visible.length >= AST_GRAPH_NODE_LIMIT) {
+              wasCapped = true;
+              break;
+            }
+            const childPosition = place(child, depth + 1);
+            if (childPosition) position.children.push(childPosition);
+          }
+        }
+        position.x = AST_GRAPH_MARGIN + depth * (AST_NODE_WIDTH + AST_HORIZONTAL_GAP);
+        if (position.children.length) {
+          position.y = (position.children[0].y + position.children[position.children.length - 1].y) / 2;
+        } else {
+          position.y = leafY + AST_NODE_HEIGHT / 2;
+          leafY += AST_NODE_HEIGHT + AST_VERTICAL_GAP;
+        }
+        return position;
+      }
+
+      const rootPosition = place(astRootModel, 0);
+      const graphWidth = AST_GRAPH_MARGIN * 2 + (maxDepth + 1) * AST_NODE_WIDTH + maxDepth * AST_HORIZONTAL_GAP;
+      const graphHeight = Math.max(180, leafY + AST_GRAPH_MARGIN);
+      astGraphSize = { width: graphWidth, height: graphHeight };
+      svg.setAttribute("viewBox", `0 0 ${graphWidth} ${graphHeight}`);
+      svg.setAttribute("width", String(Math.ceil(graphWidth * astZoom)));
+      svg.setAttribute("height", String(Math.ceil(graphHeight * astZoom)));
+      byId("ast-zoom-value").textContent = `${Math.round(astZoom * 100)}%`;
+
+      const edgeLayer = document.createElementNS(SVG_NS, "g");
+      edgeLayer.setAttribute("aria-hidden", "true");
+      const nodeLayer = document.createElementNS(SVG_NS, "g");
+
+      function drawEdges(position) {
+        position.children.forEach(child => {
+          const startX = position.x + AST_NODE_WIDTH;
+          const endX = child.x;
+          const middleX = (startX + endX) / 2;
+          const path = document.createElementNS(SVG_NS, "path");
+          path.setAttribute("class", "ast-edge");
+          path.setAttribute("d", `M ${startX} ${position.y} C ${middleX} ${position.y}, ${middleX} ${child.y}, ${endX} ${child.y}`);
+          edgeLayer.appendChild(path);
+          drawEdges(child);
+        });
+      }
+
+      function drawNodes(position) {
+        const model = position.model;
+        const group = document.createElementNS(SVG_NS, "g");
+        group.setAttribute("class", `ast-node ${astNodeCategory(model.kind)}${astSelectedNodeId === model.id ? " selected" : ""}`);
+        group.setAttribute("transform", `translate(${position.x} ${position.y - AST_NODE_HEIGHT / 2})`);
+        group.setAttribute("role", "button");
+        group.setAttribute("tabindex", "0");
+        group.setAttribute("aria-pressed", String(astSelectedNodeId === model.id));
+        group.setAttribute("aria-label", `${model.kind}: ${astNodeSummary(model)}. ${model.children.length} child node(s).`);
+        if (model.children.length) group.setAttribute("aria-expanded", String(astExpandedNodeIds.has(model.id)));
+        group.dataset.astNodeId = model.id;
+
+        const rect = document.createElementNS(SVG_NS, "rect");
+        rect.setAttribute("width", String(AST_NODE_WIDTH));
+        rect.setAttribute("height", String(AST_NODE_HEIGHT));
+        rect.setAttribute("rx", "10");
+        group.appendChild(rect);
+
+        const kindText = document.createElementNS(SVG_NS, "text");
+        kindText.setAttribute("x", "13");
+        kindText.setAttribute("y", "25");
+        kindText.setAttribute("class", "ast-node-kind");
+        kindText.textContent = model.kind;
+        group.appendChild(kindText);
+
+        const summaryText = document.createElementNS(SVG_NS, "text");
+        summaryText.setAttribute("x", "13");
+        summaryText.setAttribute("y", "45");
+        summaryText.setAttribute("class", "ast-node-summary");
+        summaryText.textContent = astNodeSummary(model);
+        group.appendChild(summaryText);
+
+        if (model.children.length) {
+          const isExpanded = astExpandedNodeIds.has(model.id);
+          const expander = document.createElementNS(SVG_NS, "circle");
+          expander.setAttribute("cx", String(AST_NODE_WIDTH - 17));
+          expander.setAttribute("cy", String(AST_NODE_HEIGHT / 2));
+          expander.setAttribute("r", "10");
+          expander.setAttribute("class", "ast-node-expander");
+          expander.setAttribute("data-ast-toggle", "true");
+          expander.setAttribute("aria-hidden", "true");
+          group.appendChild(expander);
+
+          const expanderText = document.createElementNS(SVG_NS, "text");
+          expanderText.setAttribute("x", String(AST_NODE_WIDTH - 17));
+          expanderText.setAttribute("y", String(AST_NODE_HEIGHT / 2 + 4));
+          expanderText.setAttribute("text-anchor", "middle");
+          expanderText.setAttribute("class", "ast-node-expander-label");
+          expanderText.textContent = isExpanded ? "−" : "+";
+          group.appendChild(expanderText);
+        }
+
+        group.addEventListener("click", event => {
+          if (event.target.closest && event.target.closest("[data-ast-toggle]")) {
+            if (astExpandedNodeIds.has(model.id)) astExpandedNodeIds.delete(model.id);
+            else astExpandedNodeIds.add(model.id);
+            renderAstGraph();
+            const refreshed = astSvgNodesById.get(model.id);
+            if (refreshed) refreshed.focus();
+            return;
+          }
+          setAstSelectedNode(model.id);
+        });
+
+        group.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setAstSelectedNode(model.id);
+          } else if (event.key === "ArrowRight" && model.children.length) {
+            event.preventDefault();
+            astExpandedNodeIds.add(model.id);
+            renderAstGraph();
+            const refreshed = astSvgNodesById.get(model.id);
+            if (refreshed) refreshed.focus();
+          } else if (event.key === "ArrowLeft" && astExpandedNodeIds.has(model.id)) {
+            event.preventDefault();
+            astExpandedNodeIds.delete(model.id);
+            renderAstGraph();
+            const refreshed = astSvgNodesById.get(model.id);
+            if (refreshed) refreshed.focus();
+          }
+        });
+
+        nodeLayer.appendChild(group);
+        astSvgNodesById.set(model.id, group);
+        position.children.forEach(drawNodes);
+      }
+
+      drawEdges(rootPosition);
+      drawNodes(rootPosition);
+      svg.append(edgeLayer, nodeLayer);
+
+      if (!astModelsById.has(astSelectedNodeId)) astSelectedNodeId = astRootModel.id;
+      setAstSelectedNode(astSelectedNodeId);
+      const capMessage = wasCapped ? ` The diagram is capped at ${AST_GRAPH_NODE_LIMIT.toLocaleString()} visible nodes; collapse a branch to inspect other paths.` : "";
+      byId("ast-graph-count").textContent = `${visible.length} visible · ${astModelsById.size} total`;
+      byId("ast-graph-message").textContent =
+        `Select a card for details. Use its +/− control, keyboard arrows, or the expand controls to navigate. ${visible.length} node(s) are shown.${capMessage}`;
+
+      if (focusedId && astSvgNodesById.has(focusedId)) astSvgNodesById.get(focusedId).focus();
+      else {
+        viewport.scrollLeft = Math.min(previousLeft, viewport.scrollWidth - viewport.clientWidth);
+        viewport.scrollTop = Math.min(previousTop, viewport.scrollHeight - viewport.clientHeight);
+      }
+    }
+
+    function renderAstExplorer(serializedRoot) {
+      astRootModel = buildAstGraphModel(serializedRoot);
+      astExpandedNodeIds = new Set();
+      astZoom = 1;
+      if (astRootModel) {
+        function expandShallow(node, depth) {
+          if (depth < 2 && node.children.length) astExpandedNodeIds.add(node.id);
+          node.children.forEach(child => expandShallow(child, depth + 1));
+        }
+        expandShallow(astRootModel, 0);
+        astSelectedNodeId = astRootModel.id;
+      } else {
+        astSelectedNodeId = null;
+      }
+      renderAstGraph();
+      byId("ast-graph-viewport").scrollTo(0, 0);
+    }
+
+    function resetAstExplorer() {
+      astRootModel = null;
+      astModelsById = new Map();
+      astExpandedNodeIds = new Set();
+      astSelectedNodeId = null;
+      astZoom = 1;
+      renderAstGraph();
+      byId("ast-tree").replaceChildren();
+    }
+
+    function setAstZoom(zoom) {
+      const viewport = byId("ast-graph-viewport");
+      const nextZoom = Math.max(.005, Math.min(2.4, zoom));
+      const ratio = nextZoom / astZoom;
+      astZoom = nextZoom;
+      applyAstZoom();
+      viewport.scrollLeft = Math.max(0, viewport.scrollLeft * ratio);
+      viewport.scrollTop = Math.max(0, viewport.scrollTop * ratio);
+    }
+
+    function fitAstGraph() {
+      if (!astGraphSize.width || !astGraphSize.height) return;
+      const viewport = byId("ast-graph-viewport");
+      const scale = Math.min(
+        (viewport.clientWidth - 24) / astGraphSize.width,
+        (viewport.clientHeight - 24) / astGraphSize.height,
+        2.4
+      );
+      astZoom = Math.max(.005, scale);
+      applyAstZoom();
+      viewport.scrollTo(0, 0);
+    }
+
+    byId("ast-zoom-in").addEventListener("click", () => setAstZoom(astZoom * 1.2));
+    byId("ast-zoom-out").addEventListener("click", () => setAstZoom(astZoom / 1.2));
+    byId("ast-fit").addEventListener("click", fitAstGraph);
+    byId("ast-reset").addEventListener("click", () => {
+      astZoom = 1;
+      applyAstZoom();
+      byId("ast-graph-viewport").scrollTo(0, 0);
+    });
+    byId("ast-pan-up").addEventListener("click", () => byId("ast-graph-viewport").scrollBy({ top: -150, behavior: "smooth" }));
+    byId("ast-pan-down").addEventListener("click", () => byId("ast-graph-viewport").scrollBy({ top: 150, behavior: "smooth" }));
+    byId("ast-pan-left").addEventListener("click", () => byId("ast-graph-viewport").scrollBy({ left: -180, behavior: "smooth" }));
+    byId("ast-pan-right").addEventListener("click", () => byId("ast-graph-viewport").scrollBy({ left: 180, behavior: "smooth" }));
+    byId("ast-expand-all").addEventListener("click", () => {
+      astModelsById.forEach(model => { if (model.children.length) astExpandedNodeIds.add(model.id); });
+      renderAstGraph();
+    });
+    byId("ast-collapse-all").addEventListener("click", () => {
+      astExpandedNodeIds.clear();
+      renderAstGraph();
+      byId("ast-graph-viewport").scrollTo(0, 0);
+    });
+    byId("ast-graph-viewport").addEventListener("keydown", event => {
+      const viewport = byId("ast-graph-viewport");
+      const amount = event.shiftKey ? 180 : 80;
+      const directions = {
+        ArrowUp: [0, -amount], ArrowDown: [0, amount],
+        ArrowLeft: [-amount, 0], ArrowRight: [amount, 0],
+      };
+      if (directions[event.key]) {
+        event.preventDefault();
+        const [left, top] = directions[event.key];
+        viewport.scrollBy({ left, top });
+      }
+    });
+
+    function renderAnalysisReports(data) {
+      const lexical = data.lexical_report || {
+        status: "unavailable", tokens: [], diagnostics: [],
+      };
+      lexicalTokens = Array.isArray(lexical.tokens) ? lexical.tokens : [];
+      byId("token-count").textContent = lexical.status === "success"
+        ? `${lexicalTokens.length} token(s)`
+        : lexical.status;
+      byId("token-report-message").textContent = lexical.status === "success"
+        ? "Token values and one-based source locations come directly from the lexer. The EOF token is included."
+        : (lexical.diagnostics || []).join(" ") || "Tokenization did not produce a report.";
+      tokenPage = 0;
+      renderTokenPage();
+
+      const ast = data.ast_report || {
+        status: "unavailable", tree: null, truncated: false, diagnostics: [],
+      };
+      byId("ast-status").textContent = ast.status;
+      byId("ast-report-message").textContent = ast.status === "success"
+        ? (ast.truncated
+          ? "The AST report was truncated at the configured size limit. Expand nodes to inspect the serialized tree."
+          : "This interactive graph is rendered from the parser's serialized AST.")
+        : (ast.diagnostics || []).join(" ") || "Parsing did not produce an AST.";
+      renderAstExplorer(ast.status === "success" ? ast.tree : null);
+      byId("ast-tree").replaceChildren();
+      if (ast.status === "success" && ast.tree) {
+        byId("ast-tree").appendChild(createAstValue(ast.tree, "Program"));
+      }
+
+      const semantic = data.semantic_report || {
+        status: "unavailable", diagnostics: [], symbols: null,
+      };
+      byId("semantic-status").textContent = semantic.status;
+      fillList(
+        "semantic-diagnostics",
+        semantic.diagnostics || [],
+        () => "SEMANTIC ERROR",
+        item => item,
+        "error"
+      );
+
+      const symbols = semantic.symbols;
+      const symbolContainer = byId("semantic-symbols");
+      symbolContainer.replaceChildren();
+      if (!symbols) {
+        byId("symbol-status").textContent = "Unavailable";
+        byId("symbol-message").textContent = semantic.status === "failed"
+          ? "Symbols are withheld because semantic analysis failed; the analyzer may have only partial tables."
+          : "Symbols are available after a successful semantic pass. Local scopes are not retained by the analyzer.";
+        return;
+      }
+
+      byId("symbol-status").textContent = "Complete contract tables";
+      byId("symbol-message").textContent =
+        "State variables and registered function signatures are shown. Local function scopes are not retained by the analyzer.";
+
+      const appendSymbolGroup = (title, headings, rows) => {
+        const group = document.createElement("div");
+        group.className = "symbol-group";
+        const heading = document.createElement("h3");
+        heading.textContent = title;
+        group.appendChild(heading);
+
+        const scroll = document.createElement("div");
+        scroll.className = "symbol-table-scroll";
+        const table = document.createElement("table");
+        table.className = "report-table";
+        const thead = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+        headings.forEach(text => {
+          const cell = document.createElement("th");
+          cell.textContent = text;
+          headerRow.appendChild(cell);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
+        rows.forEach(values => {
+          const row = document.createElement("tr");
+          values.forEach(value => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+          });
+          tbody.appendChild(row);
+        });
+        if (!rows.length) {
+          const row = document.createElement("tr");
+          const cell = document.createElement("td");
+          cell.colSpan = headings.length;
+          cell.textContent = "No entries.";
+          row.appendChild(cell);
+          tbody.appendChild(row);
+        }
+        table.appendChild(tbody);
+        scroll.appendChild(table);
+        group.appendChild(scroll);
+        symbolContainer.appendChild(group);
+      };
+
+      appendSymbolGroup(
+        "State variables",
+        ["Name", "Type"],
+        symbols.states.map(item => [item.name, item.type])
+      );
+      appendSymbolGroup(
+        "Functions",
+        ["Name", "Parameters", "Return type"],
+        symbols.functions.map(item => [
+          item.name,
+          item.parameters.map(parameter => `${parameter.name}: ${parameter.type}`).join(", ") || "—",
+          item.return_type,
+        ])
+      );
+    }
+
+
+
+    form.addEventListener("submit", async (event) => {
+
+      event.preventDefault();
+
+      clearDisplayedResults();
+      lastAnalyzedInput = null;
+
+
+
+      hide("error-box");
+
+
+
+      button.disabled = true;
+
+      button.textContent = "Analyzing contract…";
+
+
+
+      let requestSourceFile = null;
+      let requestFilename = "";
+      const requestDomain = byId("domain").value;
+
+      try {
+
+        const formData = new FormData();
+        formData.append("domain", requestDomain);
+
+        if (inputMode === "paste") {
+          const source = byId("pasted-source").value;
+          if (!source.trim()) {
+            throw new Error("Paste or type MiniChain source code before running analysis.");
+          }
+          requestSourceFile = new Blob([source], { type: "text/plain;charset=utf-8" });
+          if (requestSourceFile.size > MAX_SOURCE_BYTES) {
+            throw new Error("The pasted source exceeds the 1 MB size limit.");
+          }
+          requestFilename = "pasted_contract.mc";
+          originalCode = source;
+        } else {
+          requestSourceFile = byId("source_file").files[0];
+          if (!requestSourceFile) {
+            throw new Error("Choose a .mc or .txt file before running analysis.");
+          }
+          if (requestSourceFile.size > MAX_SOURCE_BYTES) {
+            throw new Error("The selected file exceeds the 1 MB size limit.");
+          }
+          requestFilename = requestSourceFile.name;
+          try {
+            originalCode = await requestSourceFile.text();
+          } catch (_error) {
+            originalCode = "";
+          }
+        }
+
+        formData.append("source_file", requestSourceFile, requestFilename);
+
+        const response = await fetch("/api/analyze", {
+
+          method: "POST",
+
+          body: formData
+
+        });
+
+
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (_error) {
+          throw new Error(response.ok
+            ? "Analysis returned an invalid response."
+            : `Analysis request failed (HTTP ${response.status}).`);
+        }
+
+
+
+        if (!response.ok) {
+
+          throw new Error(
+
+            data.error || "Analysis request failed."
+
+          );
+
+        }
+
+        if (data.success) {
+          lastAnalyzedInput = {
+            domain: requestDomain,
+            file: requestSourceFile,
+            filename: requestFilename,
+          };
+        }
+
+
+
+        hide("empty-state");
+
+        show("results");
+
+        show("analysis-tabs");
+        activateReportView("overview");
+        byId("original-code").textContent = originalCode;
+        byId("original-source-name").textContent = data.filename || "Uploaded source";
+        renderAnalysisReports(data);
+
+        show("stage-panel");
+
+
+
+        byId("result-title").textContent =
+
+          data.contract_name
+
+            ? `${data.contract_name} · Analysis results`
+
+            : "Analysis results";
+
+
+
+        byId("result-sub").textContent =
+
+          `${data.filename || "Source"} · ${data.domain.replaceAll("_", " ")}`;
+
+
+
+        byId("overall-status").textContent =
+
+          data.success ? "✓ Completed" : "! Failed";
+
+
+
+        byId("overall-status").classList.toggle(
+
+          "failed",
+
+          !data.success
+
+        );
+        if (data.success) {
+          show("repair-button");
+          show("repair-disclosure");
+        } else {
+          hide("repair-button");
+          hide("repair-disclosure");
+        }
+
+
+
+        byId("stat-errors").textContent =
+
+          data.summary.errors ?? data.errors.length;
+
+
+
+        byId("stat-issues").textContent =
+
+          data.summary.domain_issues ?? data.domain_issues.length;
+
+
+
+        byId("stat-optimizations").textContent =
+
+          data.summary.optimizations ?? data.optimizations.length;
+
+
+
+        byId("stat-warnings").textContent =
+
+          data.summary.warnings ?? data.warnings.length;
+
+
+
+        const stages = byId("stages");
+
+        stages.replaceChildren();
+
+
+
+        data.stages.forEach(item => {
+
+          const card = document.createElement("div");
+
+          card.className = "stage";
+
+
+
+          const top = document.createElement("div");
+
+          top.className = "stage-top";
+
+
+
+          const dot = document.createElement("span");
+
+          dot.className =
+
+            "dot" + (
+
+              item.status === "failed" ? " failed" : ""
+
+            );
+
+
+
+          const title = document.createElement("span");
+
+          title.textContent = item.name;
+
+
+
+          top.append(dot, title);
+
+
+
+          const message = document.createElement("p");
+
+          message.textContent = item.message;
+
+
+
+          card.append(top, message);
+
+          stages.appendChild(card);
+
+        });
+
+
+
+        show("issues-panel");
+
+
+
+        byId("issues-count").textContent =
+
+          `${data.domain_issues.length} finding(s)`;
+
+
+
+        fillList(
+
+          "issues",
+
+          data.domain_issues,
+
+          item => `${item.severity} · ${item.rule_id}`,
+
+          item =>
+
+            `${item.function ? item.function + "(): " : ""}${item.message}`,
+
+          "warning"
+
+        );
+
+
+
+        show("optimizations-panel");
+
+
+
+        byId("optimizations-count").textContent =
+
+          `${data.optimizations.length} entry/entries`;
+
+
+
+        fillList(
+
+          "optimizations",
+
+          data.optimizations,
+
+          item => item.rule_id,
+
+          item => item.message
+
+        );
+
+
+
+        show("warnings-panel");
+
+
+
+        byId("warnings-count").textContent =
+
+          `${data.warnings.length} warning(s)`;
+
+
+
+        fillList(
+
+          "warnings",
+
+          data.warnings,
+
+          () => "WARNING",
+
+          item => item,
+
+          "warning"
+
+        );
+
+
+
+        if (data.errors.length) {
+
+          show("errors-panel");
+          show("errors-disclosure");
+          byId("errors-disclosure").open = true;
+
+
+
+          byId("errors-count").textContent =
+
+            `${data.errors.length} error(s)`;
+
+
+
+          fillList(
+
+            "errors",
+
+            data.errors,
+
+            () => "ERROR",
+
+            item => item,
+
+            "error"
+
+          );
+
+        } else {
+
+          hide("errors-panel");
+          hide("errors-disclosure");
+
+        }
+
+
+
+        if (
+          data.success &&
+          typeof data.optimized_code === "string" &&
+          data.optimized_code
+        ) {
+
+          optimizedCode = data.optimized_code;
+
+
+
+          const originalName =
+
+            (data.filename || "contract.mc")
+
+              .replace(/\.(mc|txt)$/i, "");
+
+
+
+          outputFilename =
+
+            `${originalName}_optimized.mc`;
+
+
+
+          byId("optimized-code").textContent =
+
+            optimizedCode;
+
+
+
+          show("code-panel");
+          hide("optimized-unavailable");
+
+        } else {
+
+          optimizedCode = "";
+          outputFilename = "optimized_contract.mc";
+
+          hide("code-panel");
+          show("optimized-unavailable");
+
+        }
+
+
+
+      } catch (error) {
+
+        clearDisplayedResults();
+
+        byId("error-box").textContent =
+
+          error.message || "Unexpected error.";
+
+
+
+        show("error-box");
+
+
+
+      } finally {
+
+        button.disabled = false;
+
+        button.textContent = "Run compiler analysis ↗";
+
+      }
+
+    });
+
+
+
+    byId("download-button").addEventListener("click", () => {
+
+      if (!optimizedCode || byId("code-panel").classList.contains("hidden")) {
+
+        return;
+
+      }
+
+
+
+      const blob = new Blob(
+
+        [optimizedCode],
+
+        { type: "text/plain;charset=utf-8" }
+
+      );
+
+
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+
+
+
+      link.href = url;
+
+      link.download = outputFilename;
+
+
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+
+
+
+      URL.revokeObjectURL(url);
+
+    });
+
+
+    byId("repair-button").addEventListener("click", async () => {
+      hide("error-box");
+      const requestId = ++repairRequestId;
+      clearRepairResults();
+      show("repair-disclosure");
+      byId("repair-disclosure").open = true;
+      show("repair-panel");
+      byId("repair-disclosure").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      byId("repair-message").textContent = "Applying supported repairs and re-running analysis…";
+
+      const repairButton = byId("repair-button");
+      repairButton.disabled = true;
+      repairButton.textContent = "Repairing…";
+
+      try {
+        if (!lastAnalyzedInput) {
+          throw new Error("Run a successful analysis before starting Automatic Repair.");
+        }
+        const repairFormData = new FormData();
+        repairFormData.append("domain", lastAnalyzedInput.domain);
+        repairFormData.append(
+          "source_file",
+          lastAnalyzedInput.file,
+          lastAnalyzedInput.filename
+        );
+        const response = await fetch("/api/repair", {
+          method: "POST",
+          body: repairFormData
+        });
+        if (requestId !== repairRequestId) return;
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (_error) {
+          if (!response.ok) {
+            throw new Error(`Automatic repair failed (HTTP ${response.status}).`);
+          }
+          throw new Error("Automatic repair returned an invalid response.");
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data && typeof data.error === "string"
+              ? data.error
+              : `Automatic repair failed (HTTP ${response.status}).`
+          );
+        }
+
+        const isRecord = value =>
+          value !== null && typeof value === "object" && !Array.isArray(value);
+        const isAppliedRepair = item =>
+          isRecord(item) &&
+          typeof item.rule_id === "string" &&
+          typeof item.function === "string" &&
+          Array.isArray(item.changes) &&
+          item.changes.every(change => typeof change === "string");
+        const isSkippedRule = item =>
+          isRecord(item) &&
+          typeof item.rule_id === "string" &&
+          typeof item.reason === "string";
+        const isRejectedRepair = item =>
+          isAppliedRepair(item) && typeof item.reason === "string";
+        const after = isRecord(data) ? data.analysis_after : null;
+
+        if (
+          !isRecord(data) ||
+          typeof data.success !== "boolean" ||
+          !Array.isArray(data.applied) ||
+          !data.applied.every(isAppliedRepair) ||
+          !Array.isArray(data.skipped) ||
+          !data.skipped.every(isSkippedRule) ||
+          !Array.isArray(data.rejected) ||
+          !data.rejected.every(isRejectedRepair) ||
+          typeof data.repaired_code !== "string" ||
+          data.repaired_code.length === 0 ||
+          !isRecord(after) ||
+          typeof after.success !== "boolean" ||
+          !Array.isArray(after.errors) ||
+          !after.errors.every(error => typeof error === "string") ||
+          !Array.isArray(after.domain_issues) ||
+          !after.domain_issues.every(issue =>
+            isRecord(issue) &&
+            typeof issue.rule_id === "string" &&
+            typeof issue.message === "string"
+          )
+        ) {
+          throw new Error("Automatic repair returned an invalid response.");
+        }
+
+        const applied = data.applied;
+        const skipped = data.skipped;
+        const rejected = data.rejected;
+        const errors = after.errors;
+        const domainFindings = after.domain_issues;
+        const revalidationPassed =
+          data.success === true && after.success === true && errors.length === 0;
+        const fallbackReturned =
+          !revalidationPassed &&
+          typeof data.message === "string" &&
+          /original source retained/i.test(data.message);
+
+        byId("repair-count").textContent =
+          `${applied.length} applied · ${skipped.length} skipped · ${rejected.length} rejected`;
+        byId("repair-applied-count").textContent = `${applied.length}`;
+        byId("repair-skipped-count").textContent = `${skipped.length}`;
+        byId("repair-rejected-count").textContent = `${rejected.length}`;
+        fillList(
+          "repair-applied",
+          applied,
+          item => `${item.rule_id} · ${item.function}()`,
+          item => `Applied: ${item.changes.join(" ")}`
+        );
+        fillList(
+          "repair-skipped",
+          skipped,
+          item => `${item.rule_id} · MANUAL REVIEW`,
+          item => item.reason,
+          "warning"
+        );
+        fillList(
+          "repair-rejected",
+          rejected,
+          item => `${item.rule_id} · CANDIDATE REJECTED`,
+          item => item.reason,
+          "warning"
+        );
+
+        if (errors.length || domainFindings.length) {
+          show("repair-diagnostics");
+          if (errors.length) {
+            byId("repair-errors-count").textContent = `${errors.length}`;
+            fillList("repair-errors", errors, () => "COMPILER ERROR", error => error, "warning");
+            show("repair-errors-wrap");
+          }
+          if (domainFindings.length) {
+            byId("repair-domain-count").textContent = `${domainFindings.length}`;
+            fillList(
+              "repair-domain-findings",
+              domainFindings,
+              issue => `${issue.severity || "WARNING"} · ${issue.rule_id}`,
+              issue => `${issue.function ? `${issue.function}(): ` : ""}${issue.message}`,
+              "warning"
+            );
+            show("repair-domain-wrap");
+          }
+        }
+
+        const revalidationSummary =
+          `Revalidation: ${errors.length} compiler error(s), ` +
+          `${domainFindings.length} domain finding(s).`;
+
+        if (!revalidationPassed) {
+          const failureDetails =
+            typeof data.message === "string" && data.message.trim()
+              && /fail|reject|unsuccessful|retain|revalid/i.test(data.message)
+              ? data.message
+              : "The repair candidate did not pass compiler revalidation and was not accepted.";
+          byId("repair-message").textContent =
+            `Repair unsuccessful. ${failureDetails} ${revalidationSummary}`;
+
+          if (fallbackReturned) {
+            byId("repaired-code-title").textContent =
+              "Original source retained (repair candidate rejected)";
+            byId("repaired-code").textContent = data.repaired_code;
+            show("repaired-code-wrap");
+          }
+          return;
+        }
+
+        const baseName = (typeof data.filename === "string" ? data.filename : "contract.mc")
+          .replace(/\.(mc|txt)$/i, "");
+        repairedCode = data.repaired_code;
+
+        if (applied.length === 0) {
+          repairedFilename = `${baseName}_original.mc`;
+          byId("repaired-code-title").textContent =
+            "Original source (no supported repairs applied)";
+          byId("download-repaired-button").textContent = "Download original .mc";
+          byId("repair-message").textContent =
+            `No supported repairs were applied. The original source passed compiler revalidation. ${revalidationSummary}`;
+        } else {
+          const isPartial = skipped.length > 0 || domainFindings.length > 0;
+          repairedFilename = isPartial
+            ? `${baseName}_partially_repaired.mc`
+            : `${baseName}_repaired.mc`;
+          byId("repaired-code-title").textContent = isPartial
+            ? "Source after partial repair"
+            : "Repaired MiniChain source";
+          byId("download-repaired-button").textContent = isPartial
+            ? "Download partially repaired .mc"
+            : "Download repaired .mc";
+          byId("repair-message").textContent = isPartial
+            ? `Partial repair revalidated successfully. ${applied.length} repair(s) applied; ${skipped.length} rule(s) skipped. ${revalidationSummary}`
+            : `Repair revalidated successfully. ${applied.length} repair(s) applied. ${revalidationSummary}`;
+        }
+
+        byId("repaired-code").textContent = repairedCode;
+        repairOutputDownloadable = true;
+        show("repaired-code-wrap");
+        show("download-repaired-button");
+      } catch (error) {
+        if (requestId === repairRequestId) {
+          clearRepairResults();
+          show("repair-panel");
+          byId("repair-message").textContent = error.message || "Unexpected repair error.";
+        }
+      } finally {
+        if (requestId === repairRequestId) {
+          repairButton.disabled = false;
+          repairButton.textContent = "Automatic Repair";
+        }
+      }
+    });
+
+    byId("download-repaired-button").addEventListener("click", () => {
+      if (!repairOutputDownloadable || !repairedCode) return;
+      const blob = new Blob([repairedCode], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = repairedFilename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    });
+
+  </script>
+
+</body>
+
+</html>
